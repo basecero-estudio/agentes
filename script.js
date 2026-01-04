@@ -1,62 +1,42 @@
-let agenteActual = 'orquestador';
-const agentes = {
-    'orquestador': { nombre: 'Orquestador', endpoint: 'orquestador' },
-    'producto': { nombre: 'Producto/UX', endpoint: 'agente-producto' },
-    'copy': { nombre: 'Copy/Marketing', endpoint: 'agente-copy' },
-    'legal': { nombre: 'Legal/Contratos', endpoint: 'agente-legal' },
-    'desarrollo': { nombre: 'Desarrollo/Ops', endpoint: 'agente-desarrollo' },
-    'qa': { nombre: 'QA/Auditoría', endpoint: 'agente-qa' }
+const N8N_URL = "https://basecero-n8n-ia-team.hf.space/webhook";
+let agenteActivo = "producto";
+
+const nombresAgentes = {
+    'producto': 'Producto & UX',
+    'copy': 'Copy & Marketing',
+    'legal': 'Legal & Contratos',
+    'desarrollo': 'Desarrollo & Ops',
+    'qa': 'Auditoría QA'
 };
 
-function seleccionarAgente(tipo) {
-    agenteActual = tipo;
-    document.querySelectorAll('.agent-item').forEach(el => el.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById('agenteSeleccionado').textContent = agentes[tipo].nombre;
-    addMessage('bot', `Has cambiado al canal de **${agentes[tipo].nombre}**. ¿En qué puedo ayudarte con este módulo?`);
-}
+const endpoints = {
+    'producto': 'agente-producto',
+    'copy': 'agente-copy',
+    'legal': 'agente-legal',
+    'desarrollo': 'agente-desarrollo',
+    'qa': 'agente-qa'
+};
 
-async function enviarMensajeChat() {
-    const input = document.getElementById('chatInput');
-    const tarea = input.value.trim();
-    if (!tarea) return;
-
-    addMessage('user', tarea);
-    input.value = '';
+function cambiarAgente(agente, element) {
+    agenteActivo = agente;
+    document.querySelectorAll('.agent-btn').forEach(b => b.classList.remove('active'));
+    element.classList.add('active');
     
-    const n8nUrl = document.getElementById('n8nUrl').value.trim();
-    setStatus('Procesando...', 'status-online');
-
-    try {
-        const response = await fetch(`${n8nUrl}/${agentes[agenteActual].endpoint}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tarea })
-        });
-
-        // Manejamos si la respuesta es texto plano o JSON
-        const data = await response.text();
-        addMessage('bot', data);
-    } catch (error) {
-        addMessage('bot', `❌ Error de conexión: ${error.message}`);
-    } finally {
-        setStatus('Online', 'status-online');
-    }
+    addMessage('bot', `Ahora estás hablando con el especialista en **${nombresAgentes[agente]}**. ¿Qué quieres consultar?`);
 }
 
 async function ejecutarMaestro() {
-    const tarea = document.getElementById('tareaOrquestador').value.trim();
-    if (!tarea) return alert("Ingresa una tarea para el reporte maestro");
+    const tarea = document.getElementById('tareaMaestra').value;
+    if(!tarea) return alert("Por favor, describe tu proyecto.");
 
     const btn = document.getElementById('btnMaestro');
     btn.disabled = true;
-    btn.textContent = "⚙️ Generando Propuesta (espera 10s)...";
+    btn.textContent = "Procesando Propuesta Integral...";
 
     try {
-        const n8nUrl = document.getElementById('n8nUrl').value.trim();
-        const response = await fetch(`${n8nUrl}/master-workflow`, {
+        const response = await fetch(`${N8N_URL}/master-workflow`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ tarea })
         });
 
@@ -64,33 +44,47 @@ async function ejecutarMaestro() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'propuesta-base-cero.md';
-        document.body.appendChild(a);
+        a.download = `Propuesta-BaseCero-${Date.now()}.md`;
         a.click();
-        a.remove();
-        addMessage('bot', '✅ ¡Reporte Maestro generado y descargado con éxito!');
-    } catch (error) {
-        alert("Error en Workflow Maestro: " + error.message);
-    } finally {
+        
+        btn.textContent = "¡Reporte Generado!";
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = "Generar Reporte Integral (.md)";
+        }, 3000);
+
+    } catch (e) {
+        alert("Error al conectar con el servidor.");
         btn.disabled = false;
-        btn.textContent = "Iniciar Workflow Maestro";
     }
 }
 
-function addMessage(sender, text) {
-    const chatBox = document.getElementById('chatBox');
+async function enviarMensaje() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if(!msg) return;
+
+    addMessage('user', msg);
+    input.value = '';
+
+    try {
+        const response = await fetch(`${N8N_URL}/${endpoints[agenteActivo]}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ tarea: msg })
+        });
+        const data = await response.text();
+        addMessage('bot', data);
+    } catch (e) {
+        addMessage('bot', "Error: No se pudo obtener respuesta del especialista.");
+    }
+}
+
+function addMessage(type, text) {
+    const display = document.getElementById('chatDisplay');
     const div = document.createElement('div');
-    div.className = `msg ${sender}`;
+    div.className = `msg ${type}`;
     div.innerHTML = text.replace(/\n/g, '<br>');
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    display.appendChild(div);
+    display.scrollTop = display.scrollHeight;
 }
-
-function setStatus(text, className) {
-    const s = document.getElementById('statusBadge');
-    s.textContent = text;
-    s.className = className;
-}
-
-function handleKeyPress(e) { if (e.key === 'Enter') enviarMensajeChat(); }
-function limpiar(id) { document.getElementById(id).value = ''; }

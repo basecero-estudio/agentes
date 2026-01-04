@@ -3,65 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base Cero - IA Team Hub</title>
+    <title>Base Cero | Panel de Agentes IA</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🚀 Base Cero - IA Team Hub</h1>
-            <p class="subtitle">Ecosistema de Agentes Especializados</p>
-        </header>
+    <nav class="navbar">
+        <div class="logo">BASE<span>CERO</span></div>
+    </nav>
 
-        <div class="config-section">
-            <label class="config-label">🔗 URL Base de n8n (Instancia HF/Cloud)</label>
-            <input type="text" id="n8nUrl" class="config-input" value="https://basecero-n8n-ia-team.hf.space/webhook">
-        </div>
-
-        <div class="master-action-card">
-            <div class="master-info">
-                <h3>📋 Generar Reporte Integral</h3>
-                <p>Ejecuta toda la cadena de agentes y descarga la propuesta completa en .md</p>
+    <main class="container">
+        <section class="hero-section">
+            <h1>Propuesta Web Profesional</h1>
+            <p>Genera un análisis integral de 360° para tu próximo proyecto digital.</p>
+            
+            <div class="master-box">
+                <textarea id="tareaMaestra" placeholder="Describe el proyecto (ej: Landing para un estudio de abogados...)"></textarea>
+                <button class="btn-main" onclick="ejecutarMaestro()" id="btnMaestro">
+                    <span>Generar Reporte Integral (.md)</span>
+                </button>
             </div>
-            <button class="btn-master" onclick="ejecutarMaestro()" id="btnMaestro">Iniciar Workflow Maestro</button>
-        </div>
+        </section>
 
-        <div class="main-grid">
-            <div class="card">
-                <h2><span class="icon">🎯</span> Orquestador</h2>
-                <textarea id="tareaOrquestador" placeholder="Ej: Necesito crear una landing para un servicio de consultoría financiera..."></textarea>
-                <div class="button-group">
-                    <button class="btn-primary" onclick="consultarOrquestador()">Analizar con Orquestador</button>
-                    <button class="btn-secondary" onclick="limpiar('tareaOrquestador')">Limpiar</button>
+        <hr class="separator">
+
+        <section class="chat-section">
+            <h2 class="section-title">Consultar con un Especialista</h2>
+            
+            <div class="chat-layout">
+                <aside class="agents-sidebar">
+                    <button class="agent-btn active" onclick="cambiarAgente('producto', this)">
+                        <span class="dot"></span> Producto & UX
+                    </button>
+                    <button class="agent-btn" onclick="cambiarAgente('copy', this)">
+                        <span class="dot"></span> Copy & Marketing
+                    </button>
+                    <button class="agent-btn" onclick="cambiarAgente('legal', this)">
+                        <span class="dot"></span> Legal & Contratos
+                    </button>
+                    <button class="agent-btn" onclick="cambiarAgente('desarrollo', this)">
+                        <span class="dot"></span> Desarrollo & Ops
+                    </button>
+                    <button class="agent-btn" onclick="cambiarAgente('qa', this)">
+                        <span class="dot"></span> Auditoría QA
+                    </button>
+                </aside>
+
+                <div class="chat-window">
+                    <div id="chatDisplay" class="chat-display">
+                        <div class="msg bot">Selecciona un especialista y hablemos sobre los detalles de tu proyecto.</div>
+                    </div>
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="chatInput" placeholder="Escribe tu consulta..." onkeypress="if(event.key==='Enter') enviarMensaje()">
+                        <button onclick="enviarMensaje()" class="btn-send">Enviar</button>
+                    </div>
                 </div>
             </div>
+        </section>
+    </main>
 
-            <div class="card">
-                <h2><span class="icon">👥</span> Seleccionar Especialista</h2>
-                <div class="agents-chat-grid">
-                    <div class="agent-item" onclick="seleccionarAgente('producto')">🧠 Producto</div>
-                    <div class="agent-item" onclick="seleccionarAgente('copy')">✍️ Copy</div>
-                    <div class="agent-item" onclick="seleccionarAgente('legal')">⚖️ Legal</div>
-                    <div class="agent-item" onclick="seleccionarAgente('desarrollo')">🧑‍💻 Dev</div>
-                    <div class="agent-item" onclick="seleccionarAgente('qa')">🔍 QA</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="chat-container">
-            <div class="chat-header">
-                <h3>💬 Chat con: <span id="agenteSeleccionado">Orquestador (Default)</span></h3>
-                <span id="statusBadge" class="status-offline">Esperando...</span>
-            </div>
-            <div id="chatBox" class="chat-box">
-                <div class="msg bot">¡Hola! Soy el sistema de Base Cero. ¿Qué proyecto vamos a auditar hoy?</div>
-            </div>
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Escribe tu mensaje aquí..." onkeypress="handleKeyPress(event)">
-                <button onclick="enviarMensajeChat()" id="btnEnviar">Enviar</button>
-            </div>
-        </div>
-    </div>
     <script src="script.js"></script>
 </body>
 </html>
