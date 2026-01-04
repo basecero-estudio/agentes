@@ -3,64 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base Cero | Panel de Agentes IA</title>
+    <title>Base Cero | IA Team</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">BASE<span>CERO</span></div>
-    </nav>
 
-    <main class="container">
-        <section class="hero-section">
-            <h1>Propuesta Web Profesional</h1>
-            <p>Genera un análisis integral de 360° para tu próximo proyecto digital.</p>
-            
-            <div class="master-box">
-                <textarea id="tareaMaestra" placeholder="Describe el proyecto (ej: Landing para un estudio de abogados...)"></textarea>
-                <button class="btn-main" onclick="ejecutarMaestro()" id="btnMaestro">
-                    <span>Generar Reporte Integral (.md)</span>
+    <header class="section bg-dark">
+        <nav class="navbar">
+            <div class="logo">BASE<span>CERO</span></div>
+        </nav>
+        <div class="container hero-content">
+            <p class="pre-title">Agentes de Inteligencia Artificial</p>
+            <h1>¿Tu negocio sigue viviendo en <span class="highlight">"tierra alquilada"</span>?</h1>
+        </div>
+    </header>
+
+    <section class="section bg-white">
+        <div class="container">
+            <div class="master-card">
+                <p class="card-label">Descripción del proyecto</p>
+                <textarea id="tareaMaestra" placeholder="Escribe aquí los detalles del sitio web o servicio digital que necesitas analizar..."></textarea>
+                <button class="btn-black" onclick="ejecutarMaestro()" id="btnMaestro">
+                    Generar Reporte Integral (.md)
                 </button>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <hr class="separator">
-
-        <section class="chat-section">
+    <section class="section bg-light">
+        <div class="container">
             <h2 class="section-title">Consultar con un Especialista</h2>
             
-            <div class="chat-layout">
-                <aside class="agents-sidebar">
-                    <button class="agent-btn active" onclick="cambiarAgente('producto', this)">
-                        <span class="dot"></span> Producto & UX
-                    </button>
-                    <button class="agent-btn" onclick="cambiarAgente('copy', this)">
-                        <span class="dot"></span> Copy & Marketing
-                    </button>
-                    <button class="agent-btn" onclick="cambiarAgente('legal', this)">
-                        <span class="dot"></span> Legal & Contratos
-                    </button>
-                    <button class="agent-btn" onclick="cambiarAgente('desarrollo', this)">
-                        <span class="dot"></span> Desarrollo & Ops
-                    </button>
-                    <button class="agent-btn" onclick="cambiarAgente('qa', this)">
-                        <span class="dot"></span> Auditoría QA
-                    </button>
-                </aside>
+            <div class="chat-container">
+                <div class="agents-menu">
+                    <button class="agent-opt active" onclick="cambiarAgente('producto', this)">Producto & UX</button>
+                    <button class="agent-opt" onclick="cambiarAgente('copy', this)">Copy & Marketing</button>
+                    <button class="agent-opt" onclick="cambiarAgente('legal', this)">Legal & Contratos</button>
+                    <button class="agent-opt" onclick="cambiarAgente('desarrollo', this)">Desarrollo & Ops</button>
+                    <button class="agent-opt" onclick="cambiarAgente('qa', this)">Auditoría QA</button>
+                </div>
 
                 <div class="chat-window">
-                    <div id="chatDisplay" class="chat-display">
-                        <div class="msg bot">Selecciona un especialista y hablemos sobre los detalles de tu proyecto.</div>
+                    <div id="chatDisplay" class="chat-messages">
+                        <div class="msg bot">👋 Soy tu asistente de Base Cero. Selecciona un área y hablemos.</div>
                     </div>
-                    <div class="chat-input-wrapper">
+                    <div class="chat-controls">
                         <input type="text" id="chatInput" placeholder="Escribe tu consulta..." onkeypress="if(event.key==='Enter') enviarMensaje()">
                         <button onclick="enviarMensaje()" class="btn-send">Enviar</button>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 Base Cero Estudio - IA Team Working</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
